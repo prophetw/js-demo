@@ -5,7 +5,7 @@
     "build": "umi build",
     "postinstall": "umi generate tmp",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
-    "test": "umi-test",
+    "test": "umi-test -w",
     "test:coverage": "umi-test --coverage"
   },
   "gitHooks": {
@@ -25,6 +25,7 @@
     "umi": "^3.3.7"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.20",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@umijs/test": "^3.3.7",
