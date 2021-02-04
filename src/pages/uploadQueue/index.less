@@ -1,0 +1,35 @@
+@searchContainerHeight: 100px;
+.model_manage_container {
+  height: 100%;
+  .search_container {
+    background-color: white;
+    height: @searchContainerHeight;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+    padding: 0 16px;
+  }
+  .table_container {
+    padding-top: 16px;
+    .content {
+      height: 100%;
+      background-color: white;
+      :global {
+        .ant-space-item {
+          margin-bottom: 0 !important;
+        }
+      }
+    }
+    height: calc(100% - @searchContainerHeight);
+  }
+  :global {
+    .ant-table-pagination.ant-pagination {
+      padding-right: 16px;
+    }
+    .ant-divider-vertical {
+      margin: 0;
+      border-left: 1px solid rgba(0, 0, 0, 0.2);
+    }
+  }
+}

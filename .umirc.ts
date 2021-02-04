@@ -1,4 +1,4 @@
-import { defineConfig } from 'umi';
+import { defineConfig } from 'umi'
 
 export default defineConfig({
   nodeModulesTransform: {
@@ -6,6 +6,7 @@ export default defineConfig({
   },
   routes: [
     { path: '/', component: '@/pages/index' },
+    { path: '/upload', component: '@/pages/uploadQueue' },
   ],
   fastRefresh: {},
-});
+})
