@@ -18,3 +18,7 @@ $ yarn start
 1.Promise 的实现
 2.上传 分片上传-续传-妙传 
 3.深拷贝
+
+##### 对比 nodejs python 计算 md5 速度对比 
+script/node/md5.js
+script/python/md5sum.py
