@@ -75,7 +75,8 @@ function mergeTempBy(md5, filename, redisClient) {
     // })
     const endMergeTime = Date.now()
     console.log(' merge cost: ', (endMergeTime - startMergeTime) / 1000 + 's')
-    rimraf.sync(targetPath)
+    // merge完成 删掉分片临时数据
+    // rimraf.sync(targetPath)
     redisClient.set(md5, savePath)
     return {
       code: 200,

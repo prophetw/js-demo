@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { Button, Input, Progress, Upload } from 'antd'
-import { UploadStatus } from './uploadQueue'
+import { UploadStatus } from '@/models/useUploadQueueState'
 // import { useUploadState } from '../../models/useUploadQueueState'
 import styles from './uploadUI.less'
 import { UploadFile } from 'antd/lib/upload/interface'

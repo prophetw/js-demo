@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import AddNewModel from './AddNewModel'
 import { message } from 'antd'
 import styles from './index.less'
+import UploadUI from './uploadUI'
 
 const ModelManager = () => {
   useEffect(() => {
@@ -33,6 +34,7 @@ const ModelManager = () => {
   return (
     <div className={styles.model_manage_container}>
       <AddNewModel />
+      <UploadUI />
     </div>
   )
 }
