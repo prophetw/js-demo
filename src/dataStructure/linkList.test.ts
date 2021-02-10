@@ -78,5 +78,7 @@ describe.only(' test linked list ', () => {
     expect(firstNode?.next?.value).toBe(2)
     expect(firstNode?.next?.next?.value).toBe(3)
     expect(firstNode?.next?.prev?.value).toBe(1)
+    expect(firstNode?.next?.next?.prev.value).toBe(2)
   })
+  test(' 链表的插入 ', () => {})
 })
