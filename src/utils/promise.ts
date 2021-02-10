@@ -1,10 +1,11 @@
 type Status = 'fulfilled' | 'pending' | 'rejected'
 
-//  https://promisesaplus.com/ 一个promise的简易实现
+//  https://promisesaplus.com/ 
+// 一个promise的简易实现
 
 type fn = (params?: any) => void
 class PromiseFn {
-  // NOTE: yellow
+  // NOTE: 
   status: Status
   value: undefined | PromiseFn | string | number
   reason: any
