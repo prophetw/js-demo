@@ -6,7 +6,9 @@ export default defineConfig({
   },
   routes: [
     { path: '/test', component: '@/pages/index' },
-    { path: '/dynamic-demo', component: '@/pages/Demo' },
+    { path: '/dynamic-demo', component: '@/pages/Demo/index' },
+    { path: '/subs-demo', component: '@/pages/Demo/subsDemo' },
+    { path: '/subs-demo1', component: '@/pages/Demo/subscription-demo' },
   ],
   fastRefresh: {},
 });

@@ -1,15 +1,95 @@
-import React, { useState, createElement } from 'react';
+import React from 'react';
 import { useSubscription } from 'use-subscription';
-let a;
+
+const MyComp = () => {
+  return <div></div>;
+};
+function load(loader) {
+  let promise = loader();
+
+  let state = {
+    loading: true,
+    loaded: null,
+    error: null,
+  };
+
+  state.promise = promise
+    .then((loaded) => {
+      state.loading = false;
+      state.loaded = loaded;
+      return loaded;
+    })
+    .catch((err) => {
+      state.loading = false;
+      state.error = err;
+      throw err;
+    });
+
+  return state;
+}
+
+function resolve(obj) {
+  return obj && obj.__esModule ? obj.default : obj;
+}
+
+function render(loaded, props) {
+  return React.createElement(resolve(loaded), props);
+}
+
+function createLoadableComponent(loadFn, options) {
+  let opts = Object.assign(
+    {
+      loader: null,
+      loading: null,
+      delay: 200,
+      timeout: null,
+      render: render,
+      webpack: null,
+      modules: null,
+    },
+    options,
+  );
+
+  let subscription = null;
+
+  function init() {
+    if (!subscription) {
+      const sub = new LoadableSubscription(loadFn, opts);
+      subscription = {
+        getCurrentValue: sub.getCurrentValue.bind(sub),
+        subscribe: sub.subscribe.bind(sub),
+        // retry: sub.retry.bind(sub),
+        // promise: sub.promise.bind(sub),
+      };
+    }
+    // return subscription.promise();
+  }
+  const LoadableComponent = (props, ref) => {
+    init();
+
+    const state = useSubscription(subscription);
+    console.log(' new state ', state);
+
+    // return React.useMemo(() => {
+    if (state.loading || state.error) {
+      return React.createElement(opts.loading, {
+        isLoading: state.loading,
+        pastDelay: state.pastDelay,
+        timedOut: state.timedOut,
+        error: state.error,
+        retry: subscription.retry,
+      });
+    } else if (state.loaded) {
+      return opts.render(state.loaded, props);
+    } else {
+      return null;
+    }
+    // }, [props, state]);
+  };
+  return LoadableComponent;
+}
 
 class LoadableSubscription {
-  _loadFn: (para: any) => void;
-  _opts: any;
-  _callbacks: any;
-  _delay: any;
-  _timeout: any;
-  _res: any;
-  _state: any;
   constructor(loadFn, opts) {
     this._loadFn = loadFn;
     this._opts = opts;
@@ -57,20 +137,22 @@ class LoadableSubscription {
 
     this._res.promise
       .then(() => {
-        this._update();
+        this._update({});
         this._clearTimeouts();
       })
-      // eslint-disable-next-line handle-callback-err
-      .catch((err) => {
-        this._update();
+      .catch((_err) => {
+        this._update({});
         this._clearTimeouts();
       });
     this._update({});
   }
 
-  _update(partial: any = {}) {
+  _update(partial) {
     this._state = {
       ...this._state,
+      error: this._res.error,
+      loaded: this._res.loaded,
+      loading: this._res.loading,
       ...partial,
     };
     this._callbacks.forEach((callback) => callback());
@@ -82,12 +164,7 @@ class LoadableSubscription {
   }
 
   getCurrentValue() {
-    return {
-      ...this._state,
-      error: this._res.error,
-      loaded: this._res.loaded,
-      loading: this._res.loading,
-    };
+    return this._state;
   }
 
   subscribe(callback) {
@@ -97,46 +174,38 @@ class LoadableSubscription {
     };
   }
 }
-let subscription: {
-  getCurrentValue: () => any;
-  subscribe: (callback: any) => () => void;
-  retry: () => void;
-  promise: () => any;
-};
 
-function init() {
-  if (!subscription) {
-    const sub = new LoadableSubscription(loadFn, opts);
-    subscription = {
-      getCurrentValue: sub.getCurrentValue.bind(sub),
-      subscribe: sub.subscribe.bind(sub),
-      retry: sub.retry.bind(sub),
-      promise: sub.promise.bind(sub),
-    };
-  }
-  return subscription.promise();
+function Loadable(opts) {
+  return createLoadableComponent(load, opts);
 }
-const Dynamic = () => {
-  const [loading, setLoading] = useState(false);
-  const [comp, setComp] = useState(null);
-  const state = useSubscription(subscription);
-  const qq = import('./index1');
-  qq.then((res) => {
-    setLoading(true);
+
+function waitFor(delay) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, delay);
   });
+}
+function createLoader(delay, loader, error?: any) {
+  return () => {
+    return waitFor(delay).then(() => {
+      if (loader) {
+        return loader();
+      } else {
+        throw error;
+      }
+    });
+  };
+}
+const Index1 = Loadable({
+  loader: createLoader(2000, () => import('./index1')),
+  loading: () => <div>loading</div>,
+});
+
+const TestMo = () => {
   return (
     <div>
-      {loading && a && a.default && createElement(a.default)}
-      {!loading && <div>loading</div>}
+      <h1>123</h1>
+      <Index1 />
     </div>
   );
 };
-const Demo = () => {
-  return (
-    <>
-      <h1> 这是Dynamic Demo </h1>
-      <Dynamic />
-    </>
-  );
-};
-export default Demo;
+export default TestMo;
