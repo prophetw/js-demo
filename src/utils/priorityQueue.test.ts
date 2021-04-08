@@ -179,11 +179,10 @@ describe(' test queue ', () => {
     arr.map((item: number) => {
       queue.addItem(item)
     })
-    console.log(queue)
+    queue.print()
     queue.addItem(1)
-    console.log(queue)
+    queue.print()
     const s = queue.getTopItem()
-    console.log(queue)
     queue.print()
     expect(1).toBe(1)
   })
