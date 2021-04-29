@@ -9,6 +9,7 @@ export default defineConfig({
     { path: '/dynamic-demo', component: '@/pages/Demo/index' },
     { path: '/subs-demo', component: '@/pages/Demo/subsDemo' },
     { path: '/subs-demo1', component: '@/pages/Demo/subscription-demo' },
+    { path: '/dd', component: '@/pages/ClipboardPaste' },
   ],
   fastRefresh: {},
   qiankun: {
